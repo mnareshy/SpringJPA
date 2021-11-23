@@ -8,7 +8,7 @@ public class Employee {
         this.dept = dept;
         this.reports = reports;
     }
-    Employee(){}
+    public Employee(){}
 
 
     Integer id;

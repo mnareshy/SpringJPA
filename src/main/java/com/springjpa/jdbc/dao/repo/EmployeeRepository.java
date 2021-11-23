@@ -12,11 +12,21 @@ import java.util.List;
 public class EmployeeRepository {
 
     @Autowired
-    JdbcTemplate jdbcTemplate;
+    JdbcTemplate  jdbcTemplate;
+
+    @Autowired
+    EmployeeRowMapper employeeRowMapper;
+
 
     public List<Employee> findAllEmployees(){
 
         return  jdbcTemplate.query("SELECT * FROM employee",new BeanPropertyRowMapper(Employee.class));
+
+    }
+
+    public List<Employee> findAllEmployeesWithEmployeeRowMapper(){
+
+        return  jdbcTemplate.query("SELECT * FROM employee",employeeRowMapper);
 
     }
 
@@ -27,4 +37,29 @@ public class EmployeeRepository {
                     ,new BeanPropertyRowMapper(Employee.class));
 
     }
+
+    public int deleteByEmployeeID(int empID){
+
+        return  jdbcTemplate.update("DELETE  FROM employee WHERE id = ?",new Object[]{empID});
+
+    }
+
+    public int insertEmployee(Employee employee){
+
+        return  jdbcTemplate.update("INSERT INTO employee(id, name, dept, reports) " +
+                " VALUES(? ,? ,? ,?) ",new Object[]{employee.getId(), employee.getName(), employee.getDept(),
+                    employee.getReports()});
+
+    }
+
+
+    public int updateEmployee(Employee employee,int id){
+
+        return  jdbcTemplate.update("UPDATE employee SET id = ?, name = ? , dept =? , reports = ?" +
+                "  WHERE  id = ? ",new Object[]{ id, employee.getName(), employee.getDept(),
+                employee.getReports(),employee.getId()});
+
+    }
+
+
 }
